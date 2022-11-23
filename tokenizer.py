@@ -1,7 +1,7 @@
 import pandas as pd
 from deepchem.feat.smiles_tokenizer import SmilesTokenizer
 
-data = pd.read_csv("data\input_smiles.csv")
+data = pd.read_csv(r'data\input_smiles.csv')
 
 vocab = r'data\vocab.txt'
 
