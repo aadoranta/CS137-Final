@@ -8,7 +8,10 @@ vocab = r'data\vocab.txt'
 smiles = list(data['SMILES'])
 
 tokenizer = SmilesTokenizer(vocab)
-print(tokenizer.get_vocab())
 
+tokens = list()
 for smile in smiles:
-    print(tokenizer.encode(smile))
+    tokens.append(tokenizer.encode(smile))
+
+data['tokenized'] = tokens
+data.to_csv(r'data\input_smiles_tokens.csv')
