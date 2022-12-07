@@ -29,7 +29,7 @@ class Tokenizer:
         return tokens
 
 
-    def int_encoder(self, pad=False):
+    def int_encoder(self, pad=False, save_csv=False, path=None):
 
         """
         :param input_data: Dataframe containing smiles strings
@@ -47,6 +47,10 @@ class Tokenizer:
 
         if pad:
             tokens = pad_sequence(tokens, batch_first=True, padding_value=-1)
+
+        if save_csv:
+            df = pd.DataFrame(data=tokens)
+            df.to_csv(path, index=False, header=False)
 
         return tokens
 

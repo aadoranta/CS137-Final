@@ -1,22 +1,17 @@
-# Use 1D convolution to decrease dimensionality into embedding size
-
 import pandas as pd
-from tokenizer import Tokenizer
+import numpy as np
+import torch
 from torch.utils.data import Dataset
-
-data = pd.read_csv(r'data\updated_smiles.csv')
-vocab = r'data\vocab.txt'
-
-tokenizer = Tokenizer(data=data, vocab=vocab)
-tokenizer.int_encoder(pad=True, save_csv=True, path=r'data\updated_smiles_tokenized.csv')
 
 
 class TokenizedSmiles(Dataset):
 
     def __init__(self, path, transform=None, target_transform=None):
-        self.data = list(pd.read_csv(path))
+        print("STARTED LOADING FROM {}".format(path))
+        self.data = torch.Tensor(np.array([[i] for i in pd.read_csv(path).to_numpy()]))
         self.transform = transform
         self.target_transform = target_transform
+        print("DONE LOADING FROM {}".format(path))
 
     def __len__(self):
         return len(self.data)
