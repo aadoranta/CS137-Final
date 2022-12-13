@@ -63,4 +63,3 @@ def vqvae_encoder(input_data):
 
     for smile in smiles:
         print(vec_quantize.quantize(smile))
-
