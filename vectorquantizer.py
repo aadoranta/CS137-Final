@@ -17,23 +17,28 @@ class VectorQuantizer(nn.Module):
     def forward(self, inputs):
         # convert inputs from BCL -> BLC
         inputs = inputs.permute(0, 2, 1).contiguous()
+        #print("INPUT", inputs.shape)
         input_shape = inputs.shape
 
         # Flatten input
         flat_input = inputs.view(-1, self._embedding_dim)
+        #print("FLAT", flat_input.shape)
 
         # Calculate distances
         distances = (torch.sum(flat_input ** 2, dim=1, keepdim=True)
                      + torch.sum(self._embedding.weight ** 2, dim=1)
                      - 2 * torch.matmul(flat_input, self._embedding.weight.t()))
+        #print("DISTANCES", distances)
 
         # Encoding
         encoding_indices = torch.argmin(distances, dim=1).unsqueeze(1)
         encodings = torch.zeros(encoding_indices.shape[0], self._num_embeddings, device=inputs.device)
         encodings.scatter_(1, encoding_indices, 1)
+        #print("ENCODINGS", encodings)
 
         # Quantize and unflatten
         quantized = torch.matmul(encodings, self._embedding.weight).view(input_shape)
+        #print("QUANTS", quantized)
 
         # Loss
         e_latent_loss = F.mse_loss(quantized.detach(), inputs)
